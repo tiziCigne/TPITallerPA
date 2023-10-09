@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.web.repository.ClienteRepositorio;
+
+import jakarta.annotation.Resource;
+
 import com.app.web.entidad.Cliente;
 
 
@@ -18,8 +21,9 @@ public class ClienteServicioIMPL implements ClienteServicio{
 
 	@Autowired 
 	private ClienteRepositorio repositorioCliente;
+	
 	@Override
-	public List<Cliente> listarTodosLosClientes() { //Recupera una lista de todos los clientes registrados en la aplicación.
+	public List<Cliente> listarTodosLosClientes(){ //Recupera una lista de todos los clientes registrados en la aplicación.
 		return repositorioCliente.findAll();
 	}
 	@Override
@@ -38,5 +42,27 @@ public class ClienteServicioIMPL implements ClienteServicio{
 	public void eliminarCliente(Long id) { //Elimina un cliente de la base de datos por su ID único.
 		repositorioCliente.deleteById(id);
 		
+	
 	}
+	
+
+	 
+	@Override
+	public List<Cliente> listAll(String palabraClave) {
+	    // Implementación de búsqueda por palabra clave
+	    if (palabraClave == null || palabraClave.isEmpty()) {
+	        // Si la palabra clave es nula o vacía, devuelve todos los clientes
+	        return repositorioCliente.findAll();
+	    } else {
+	        // Si hay una palabra clave, realiza la búsqueda por palabra clave
+	        return repositorioCliente.findByClienteContainingIgnoreCase(palabraClave);
+	    }
+	}
+	@Override
+	public Resource obtenerArchivo(String nombreArchivo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }
