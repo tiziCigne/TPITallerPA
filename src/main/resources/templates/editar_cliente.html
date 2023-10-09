@@ -38,9 +38,6 @@
 						<a class="nav-link" href="/tecnico">Tecnico</a>
 					</li>
 					<li class="nav-item">
-                        <a class="nav-link" href="/servicios">Servicios</a>
-                    </li>
-					<li class="nav-item">
 						<a class="nav-link disabled" aria-disabled="true">Programación Avanzada</a>
 					</li>
 				</ul>
@@ -68,7 +65,28 @@
 								class="form-control" placeholder="Ingrese el email: " required>
 						</div>
 						<br>
+						<div class="form-group">
+							<label>Telefono : </label> <input type="telefono" name="telefono" th:field="*{telefono}"
+								class="form-control" placeholder="Ingrese el telefono: " required>
+						</div>
+						<br>
+						<div class="form-group">
+							<label>Direccion : </label> <input type="direccion" name="direccion" th:field="*{direccion}"
+								class="form-control" placeholder="Ingrese la dieccion: " required>
+						</div>
+						<br>
+						<div class="form-group">
+							<label>Información adicional : </label> <input type="informacion" name="informacion" th:field="*{informacion}"
+								class="form-control" placeholder="Ingrese la información adicional: " required>
+						</div>
+						<br>
+						<div class="form-group">
+                            <label>Archivo : </label> 
+                            <input type="file" name="archivo" class="form-control" />
+                        </div>
+                        <br>
 						<div class="box-footer">
+							<br>
 							<button class="btn btn-success">Guardar</button>
 						</div>
 					</form>

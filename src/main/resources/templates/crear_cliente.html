@@ -37,9 +37,6 @@
 					<li class="nav-item">
 						<a class="nav-link" href="/tecnico">Tecnico</a>
 					</li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/servicios">Servicios</a>
-                    </li>					
 					<li class="nav-item">
 						<a class="nav-link disabled" aria-disabled="true">Programación Avanzada</a>
 					</li>
@@ -52,7 +49,7 @@
 			<div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
 				<h1 class="text-center">Registro de cliente</h1>
 				<div class="card-body">
-					<form th:action="@{/clientes}" th:object="${cliente}" method="POST">
+					<form th:action="@{/clientes}" th:object="${cliente}" method="POST" enctype="multipart/form-data">
 						<div class="form-group">
 							<label>Nombre : </label> <input type="text" name="nombre" th:field="*{nombre}"
 								class="form-control" placeholder="Ingrese el nombre: " pattern="[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+" required>
@@ -68,6 +65,24 @@
 								class="form-control" placeholder="Ingrese el email: " required>
 						</div>
 						<br>
+						<div class="form-group">
+							<label>Telefono : </label> <input type="telefono" name="telefono" th:field="*{telefono}"
+								class="form-control" placeholder="Ingrese el telefono: " required>
+						<br>
+						<div class="form-group">
+							<label>Direccion : </label> <input type="direccion" name="direccion" th:field="*{direccion}"
+								class="form-control" placeholder="Ingrese la direccion: " required>
+						<br>
+						<div class="form-group">
+							<label>Información adicional : </label> <input type="informacion" name="informacion" th:field="*{informacion}"
+								class="form-control" placeholder="Ingrese la información adicional: " required>
+						</div>
+						<br>
+						<div class="form-group">
+                            <label>Archivo : </label> 
+                            <input type="file" name="archivo" class="form-control" />
+                        </div>
+                        <br>
 						<div class="box-footer">
 							<button class="btn btn-success">Guardar</button>
 						</div>

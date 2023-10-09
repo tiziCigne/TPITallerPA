@@ -1,0 +1,32 @@
+<!-- En tu archivo mostrar_archivo_cliente.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Mostrar Archivo del Cliente</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Información del Cliente</h1>
+        <p>Nombre: <span th:text="${cliente.nombre}"></span></p>
+        <p>Apellido: <span th:text="${cliente.apellido}"></span></p>
+        <p>Email: <span th:text="${cliente.email}"></span></p>
+        <!-- Agrega más campos según tu necesidad -->
+		
+        <!-- Mostrar la imagen siempre -->
+		<img th:src="@{/archivos/{cliente.cliente}(cliente=${cliente})}" alt="Imagen del cliente"/> 
+
+        <!-- Mostrar siempre el enlace -->
+		<p>Archivo adjunto: <a th:href="@{/archivos/{cliente.cliente}(cliente=${cliente})}" th:text="${cliente.cliente}">Descargar Archivo</a></p>
+
+        <!-- Volver a la lista de clientes -->
+        <a th:href="@{/clientes}" class="btn btn-primary">Volver a la lista de clientes</a>
+    </div>
+</body>
+
+</html>
