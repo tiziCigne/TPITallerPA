@@ -1,15 +1,18 @@
 package com.app.web.controlador;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.web.entidad.Cliente;
 import com.app.web.entidad.OrdenTrabajo; // Cambio Vehiculo por OrdenTrabajo
@@ -19,6 +22,7 @@ import com.app.web.services.OrdenTrabajoServicio; // Cambio Vehiculo por OrdenTr
 import com.app.web.services.VehiculoServiceImpl;
 import com.app.web.services.ClienteServicioIMPL;
 import com.app.web.services.ServicioServicioImpl;
+import java.util.Date;
 
 
 @Controller
@@ -64,7 +68,7 @@ public class OrdenTrabajoControlador { // Cambio VehiculoControlador por OrdenTr
         try {
             servicio.guardarOrdenTrabajo(ordentrabajo); // Cambio Vehiculo por OrdenTrabajo
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicatePatenteException("La patente ya existe.");
+            throw new DuplicatePatenteException("La orden ya existe.");
         }
         return "redirect:/ordentrabajo"; // Cambio vehiculos por ordentrabajo
 
@@ -91,7 +95,6 @@ public class OrdenTrabajoControlador { // Cambio VehiculoControlador por OrdenTr
             @ModelAttribute("ordentrabajo") OrdenTrabajo ordentrabajo, Model modelo) { // Cambio vehiculo por ordentrabajo
         OrdenTrabajo ordentrabajoExistente = servicio.obtenerOrdenTrabajoPorID(id); // Cambio Vehiculo por OrdenTrabajo
         ordentrabajoExistente.setId(id);
-        ordentrabajoExistente.setCriterioAceptacion(ordentrabajo.getCriterioAceptacion());
 
         servicio.actualizarOrdenTrabajo(ordentrabajoExistente); // Cambio Vehiculo por OrdenTrabajo
         return "redirect:/ordentrabajo"; // Cambio vehiculos por ordentrabajo
@@ -102,4 +105,19 @@ public class OrdenTrabajoControlador { // Cambio VehiculoControlador por OrdenTr
         servicio.eliminarOrdenTrabajo(id); // Cambio Vehiculo por OrdenTrabajo
         return "redirect:/ordentrabajo"; // Cambio vehiculos por ordentrabajo
     }
+    @GetMapping("/ordentrabajo/filtrar")
+    public String filtrarOrdenesTrabajo(
+            @RequestParam(name = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
+            Model modelo
+    ) {
+        List<OrdenTrabajo> ordenesFiltradas = servicio.filtrarOrdenesPorFecha(fecha);
+        modelo.addAttribute("ordentrabajo", ordenesFiltradas);
+        return "ordentrabajo";
+    }
+
+
+
+    
+
+
 }

@@ -1,9 +1,8 @@
 package com.app.web.services;
+import java.util.Date;
 import java.util.List;
 
 import com.app.web.entidad.Cliente;
-
-import jakarta.annotation.Resource;
 
 /**
  * Interfaz que define los métodos para gestionar clientes en la aplicación.
@@ -17,9 +16,9 @@ public interface ClienteServicio {
 	public Cliente obtenerClientePorId(Long id); //Obtiene un cliente por su ID.
 	public Cliente actualizarCliente(Cliente cliente); //Actualiza los datos de un cliente existente en la base de datos.
 	public void eliminarCliente(Long id); //Elimina un cliente de la base de datos por su ID.
-	public List<Cliente> listAll(String palabraClave);
-	public Resource obtenerArchivo(String nombreArchivo);
-	
+	List<Cliente> listAll(String palabraClave);
+	List<Cliente> findByClienteContainingIgnoreCase(String nombre, String id, String apellido, String email,
+			String telefono, String direccion, String informacion, Date fechaCreacionOrden);
+	}
 
-}
 

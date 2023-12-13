@@ -1,5 +1,6 @@
 package com.app.web.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,14 @@ public class OrdenTrabajoServicioImpl implements OrdenTrabajoServicio { // Cambi
     public void eliminarOrdenTrabajo(Long id) { // Cambio Vehiculo por OrdenTrabajo
         repositorio.deleteById(id);
     }
+
+
+    @Override
+    public List<OrdenTrabajo> filtrarOrdenesPorFecha(Date fecha) {
+        return repositorio.filtrarOrdenesPorFecha(fecha);
+    }
+
+    
+
 
 }
