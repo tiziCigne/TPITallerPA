@@ -1,5 +1,6 @@
 package com.app.web.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,19 @@ public class ClienteServicioIMPL implements ClienteServicio{
 	public void eliminarCliente(Long id) { //Elimina un cliente de la base de datos por su ID único.
 		repositorioCliente.deleteById(id);
 		
+	}
+	
+	@Override
+	public List<Cliente> findByClienteContainingIgnoreCase(
+	        String nombre, String id, String apellido, String email, String telefono, 
+	        String direccion, String informacion, Date fechaCreacionOrden) {
+	    return repositorioCliente.findByClienteContainingIgnoreCase(
+	        nombre, id, apellido, email, telefono, direccion, informacion, fechaCreacionOrden);
+	}
+	@Override
+	
+	public List<Cliente> listAll(String palabraClave) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

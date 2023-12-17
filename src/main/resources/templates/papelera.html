@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html xmlns : th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="utf-8">
-	<title>Registro de tecnico</title>
+	<title>Registro de clientes</title>
+	
+	<!-- Vincula el archivo JavaScript -->
+	<script src="/js/validaciones.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -19,7 +26,7 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="#">Home</a>
+						<a class="nav-link active" aria-current="page" href="/">Home</a>
 					</li>
               <li class="nav-item">
                 <a class="nav-link" href="/vehiculos">Vehiculos</a>
@@ -49,38 +56,36 @@
 			</div>
 		</div>
 	</nav>
-	<br>
+
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-				<h1 class="text-center">Registro de tecnico</h1>
-				<div class="card-body">
-					<form th:action="@{/tecnico}" th:object="${tecnico}" method="post">
-						<div class="form-group">
-							<label>Nombre</label>
-							<input type="text" name="nombre" th:field="*{nombre}" class="form-control"
-								placeholder="Digite su nombre: " required>
-						</div>
-						<br>
-						<div class="form-group">
-							<label>Apellido</label>
-							<input type="text" name="apellido" th:field="*{apellido}" class="form-control"
-								placeholder="Digite su apellido: " required>
-						</div>
-						<br>
-						<div class="form-group">
-							    <label>Teléfono</label>
-							    <input type="text" name="telefono" th:field="*{telefono}" class="form-control" placeholder="Digite su número de teléfono" required 
-							   	pattern="[0-9]{9}" title="El número de teléfono debe tener exactamente 9 dígitos">
-						</div>
-						<br>
-						<div class="box-footer">
-							<button class="btn btn-success"> Guardar </button>
-						</div>
-					</form>
-				</div>
-			</div>
+			<h1>Lista de Ordenes de Trabajo Eliminadas</h1>
 		</div>
+
+		<br>
+		<table class="table table-dark table-hover">
+			<thead class="table-dark">
+				<tr>
+					<th>Id</th>
+					<th>Servicios</th>
+					<th>Vehiculo</th>				
+					<th>Cliente</th>					
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Iterar sobre las órdenes eliminadas -->
+				<tr th:each="OrdenTrabajo: ${ordenesEliminadas}">
+					<td th:text="${OrdenTrabajo.id}"></td>
+					<td th:text="${OrdenTrabajo.servicio.nombre}"></td>
+					<td th:text="${OrdenTrabajo.vehiculo.patente}"></td>
+					<td th:text="${OrdenTrabajo.cliente.nombre + ' ' + OrdenTrabajo.cliente.apellido}"></td>
+					<td>
+						<a th:href="@{/ordentrabajo/restaurar/{id}(id=${OrdenTrabajo.id})}" class="btn btn-success">Restaurar</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 
 </body>

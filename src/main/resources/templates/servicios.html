@@ -23,24 +23,27 @@
 					<li class="nav-item">
 						<a class="nav-link active" aria-current="page" href="/">Home</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/vehiculos">Vehiculos</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/clientes">Clientes</a>
-					</li>
-					 <li class="nav-item">
-                        <a class="nav-link" href="/servicios">Modelos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/marcas">Marcas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tecnico">Tecnico</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/servicios">Servicios</a>
-                    </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/vehiculos">Vehiculos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/clientes">Clientes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/modelos">Modelos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/marcas">Marcas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/tecnico">Tecnicos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/ordentrabajo">Orden De Trabajo</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/servicios">Servicios</a>
+              </li>
 					<li class="nav-item">
 						<a class="nav-link disabled" aria-disabled="true">Programación Avanzada</a>
 					</li>
@@ -65,6 +68,7 @@
 				<tr>
 					<th>Nombre</th>
 					<th>Descripción</th>
+					<th>Precio $</th>
 					<th>Acciones</th>
 				</tr>
 			</thead>
@@ -72,6 +76,7 @@
 				<tr th:each="servicio : ${servicios}"> <!-- Cambio la variable de modelo a servicio -->
 					<td th:text="${servicio.nombre}">Nombre</td>
 					<td th:text="${servicio.descripcion}">Descripción</td>
+					<td th:text="${servicio.precio}">Precio</td>
 					<td>
 						<a th:href="@{/servicios/editar/{id}(id=${servicio.id})}" class="btn btn-info">Editar</a> <!-- Cambio el enlace -->
 						<a th:href="@{/servicios/{id}(id=${servicio.id})}" class="btn btn-danger">Eliminar</a> <!-- Cambio el enlace -->

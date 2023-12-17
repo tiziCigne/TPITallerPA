@@ -9,103 +9,133 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.web.entidad.Cliente;
+import com.app.web.entidad.OrdenTrabajo;
 import com.app.web.services.ClienteServicio;
 
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Controller
 public class ClienteControlador {
+	
+	@Autowired
+	private ClienteServicio servicio;
+	// Maneja solicitudes GET para listar todos los clientes.
+	@GetMapping("/clientes")
+	public String listarClientes(Model modelo) {
+		// Llama al servicio para obtener todos los clientes
+		modelo.addAttribute("clientes",servicio.listarTodosLosClientes());
+		// Devuelve la vista "clientes" que mostrará la lista de clientes.
+		List<Cliente> clientes = servicio.listarTodosLosClientes();
+	    // Agregar la lógica para obtener la fecha de la última orden directamente en el controlador
+	    for (Cliente cliente : clientes) {
+	        if (cliente.getOrdenesDeTrabajo() != null && !cliente.getOrdenesDeTrabajo().isEmpty()) {
+	            // Ordenar las órdenes de trabajo por fecha de creación en orden descendente
+	            cliente.getOrdenesDeTrabajo().sort(Comparator.comparing(OrdenTrabajo::getFechaCreacion).reversed());
 
-    @Autowired
-    private ClienteServicio servicio;
+	            // Obtener la fecha de la orden más reciente
+	            Date fechaUltimaOrden = cliente.getOrdenesDeTrabajo().get(0).getFechaCreacion();
+	            cliente.actualizarFechaCreacionOrden(fechaUltimaOrden);
+	        }
+	    }
+	    
+	    modelo.addAttribute("clientes", clientes);
+		return "clientes"; //nos retorna al archivo 
+		
+	}
+	 // Maneja solicitudes GET para mostrar el formulario de registro de cliente.
+	@GetMapping("/clientes/nuevo")
+	public String mostrarFormularioDeRegistroDeCliente(Model modelo) {
+		  // Crea un nuevo objeto Cliente.
+		Cliente cliente = new Cliente();
+		// Agrega el objeto cliente al modelo para ser utilizado en la vista.
+		modelo.addAttribute("cliente", cliente);
+		 // Devuelve la vista "crear_cliente" que contiene el formulario de registro.
+		return "crear_cliente";
+		
+	}
+	// Maneja solicitudes POST para guardar un nuevo cliente.
+	@PostMapping("/clientes")
+	public String guardarCliente(@ModelAttribute("cliente")Cliente cliente) {
+		// Llama al servicio para guardar el nuevo cliente en la base de datos.
+		servicio.guardarCliente(cliente);
+		// Redirige al usuario de nuevo a la lista de clientes después de guardar.
+		return "redirect:/clientes";
+	}
+	 // Maneja solicitudes GET para mostrar el formulario de edición de cliente.
+	@GetMapping("/clientes/editar/{id}")
+	public String mostrarFormularioDeEditar(@PathVariable Long id, Model modelo){
+		 // Llama al servicio para obtener el cliente con el ID especificado.
+		modelo.addAttribute("cliente", servicio.obtenerClientePorId(id));
+		 // Devuelve la vista "editar_cliente" que contiene el formulario de edición.
+		return "editar_cliente";
+	}
+	 // Maneja solicitudes POST para actualizar un cliente existente.
+	@PostMapping("/clientes/{id}")
+	public String actualizarCliente(@PathVariable Long id, @ModelAttribute("cliente")Cliente cliente){
+		// Llama al servicio para obtener el cliente existente con el ID especificado.
+		Cliente clienteExistente = servicio.obtenerClientePorId(id);
+		// Actualiza los datos del cliente existente con los datos del formulario.
+		clienteExistente.setId(id);
+		clienteExistente.setNombre(cliente.getNombre());
+		clienteExistente.setApellido(cliente.getApellido());
+		clienteExistente.setEmail(cliente.getEmail());
+		// Llama al servicio para actualizar el cliente en la base de datos.
+		servicio.actualizarCliente(clienteExistente);
+		// Redirige al usuario de nuevo a la lista de clientes después de actualizar.
+		return "redirect:/clientes";
+		
+	}
+	
+    @GetMapping("/clientes/buscar")
+    public String buscarClientesPorFiltros(
+            @RequestParam(name = "nombre", required = false) String nombre,
+            @RequestParam(name = "id", required = false) String id,
+            @RequestParam(name = "apellido", required = false) String apellido,
+            @RequestParam(name = "email", required = false) String email,
+            @RequestParam(name = "telefono", required = false) String telefono,
+            @RequestParam(name = "direccion", required = false) String direccion,
+            @RequestParam(name = "informacion", required = false) String informacion,
+            @RequestParam(name = "fechaCreacionOrden", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaCreacionOrden,
+            Model modelo) {
 
-    // Maneja solicitudes GET para listar todos los clientes.
-    @GetMapping("/clientes")
-    public String listarClientes(Model modelo) {
-        // Llama al servicio para obtener todos los clientes
-        modelo.addAttribute("clientes", servicio.listarTodosLosClientes());
-        // Devuelve la vista "clientes" que mostrará la lista de clientes.
+        System.out.println("Fecha recibida en el controlador (OrdenTrabajo): " + fechaCreacionOrden);
+
+        List<Cliente> listaClientes = servicio.findByClienteContainingIgnoreCase(
+                nombre, id, apellido, email, telefono, direccion, informacion, fechaCreacionOrden);
+
+        modelo.addAttribute("clientes", listaClientes);
+        modelo.addAttribute("nombre", nombre);
+        modelo.addAttribute("id", id);
+        modelo.addAttribute("apellido", apellido);
+        modelo.addAttribute("email", email);
+        modelo.addAttribute("telefono", telefono);
+        modelo.addAttribute("direccion", direccion);
+        modelo.addAttribute("informacion", informacion);
+        modelo.addAttribute("fechaCreacionOrden", fechaCreacionOrden);
+
         return "clientes";
     }
-
-    // Maneja solicitudes GET para mostrar el formulario de registro de cliente.
-    @GetMapping("/clientes/nuevo")
-    public String mostrarFormularioDeRegistroDeCliente(Model modelo) {
-        // Crea un nuevo objeto Cliente.
-        Cliente cliente = new Cliente();
-        // Agrega el objeto cliente al modelo para ser utilizado en la vista.
-        modelo.addAttribute("cliente", cliente);
-        // Devuelve la vista "crear_cliente" que contiene el formulario de registro.
-        return "crear_cliente";
-    }
-
-    // Maneja solicitudes POST para guardar un nuevo cliente.
-    @PostMapping("/clientes")
-    public String guardarCliente(@ModelAttribute("cliente") Cliente cliente, @RequestParam("password") String password, Model modelo) {
-        // Aquí debes realizar la validación de la contraseña
-        if (password != null && password.equals("1234")) {
-            // La contraseña es correcta, puedes guardar al cliente
-            servicio.guardarCliente(cliente);
-            return "redirect:/clientes";
-        } else {
-            // La contraseña es incorrecta, muestra un mensaje de error
-            modelo.addAttribute("error", "Contraseña incorrecta");
-            return "crear_cliente"; // Vuelve a la página de creación de cliente con un mensaje de error
-        }
-    }
-
-    // Maneja solicitudes GET para mostrar el formulario de edición de cliente.
-    @GetMapping("/clientes/editar/{id}")
-    public String mostrarFormularioDeEditar(@PathVariable Long id, Model modelo) {
-        // Llama al servicio para obtener el cliente con el ID especificado.
-        Cliente cliente = servicio.obtenerClientePorId(id);
-        if (cliente != null) {
-            modelo.addAttribute("cliente", cliente);
-            return "editar_cliente";
-        } else {
-            // Si no se encuentra el cliente, redirige a la lista de clientes
-            return "redirect:/clientes";
-        }
-    }
-
-    // Maneja solicitudes POST para actualizar un cliente existente.
-    @PostMapping("/clientes/{id}")
-    public String actualizarCliente(@PathVariable Long id, @ModelAttribute("cliente") Cliente cliente,
-            @RequestParam("password") String password, Model modelo) {
-        // Aquí debes realizar la validación de la contraseña para editar
-        if (password != null && password.equals("1234")) {
-            // La contraseña es correcta, puedes actualizar al cliente
-            Cliente clienteExistente = servicio.obtenerClientePorId(id);
-            if (clienteExistente != null) {
-                // Actualiza los datos del cliente existente con los datos del formulario.
-                clienteExistente.setId(id);
-                clienteExistente.setNombre(cliente.getNombre());
-                clienteExistente.setApellido(cliente.getApellido());
-                clienteExistente.setEmail(cliente.getEmail());
-                // Llama al servicio para actualizar el cliente en la base de datos.
-                servicio.actualizarCliente(clienteExistente);
-                // Redirige al usuario de nuevo a la lista de clientes después de actualizar.
-                return "redirect:/clientes";
-            } else {
-                // Cliente no encontrado, muestra un mensaje de error
-                modelo.addAttribute("error", "Cliente no encontrado");
-                return "editar_cliente"; // Vuelve a la página de edición de cliente con un mensaje de error
-            }
-        } else {
-            // La contraseña es incorrecta, muestra un mensaje de error
-            modelo.addAttribute("error", "Contraseña incorrecta");
-            // Vuelve a la página de edición de cliente con un mensaje de error
-            modelo.addAttribute("cliente", cliente);
-            return "editar_cliente";
-        }
-    }
-
-    // Maneja solicitudes GET para eliminar un cliente.
-    @GetMapping("/clientes/{id}")
-    public String eliminarCliente(@PathVariable Long id) {
-        // Llama al servicio para eliminar el cliente con el ID especificado.
-        servicio.eliminarCliente(id);
-        // Redirige al usuario de nuevo a la lista de clientes después de eliminar.
+    
+    @GetMapping("/clientes/limpiarFiltros")
+    public String limpiarFiltros(Model modelo) {
+        // Redirect to the main clients page without filtering
         return "redirect:/clientes";
     }
+
+	
+	// Maneja solicitudes GET para eliminar un cliente.
+	@GetMapping("/clientes/{id}")
+	public String eliminarCliente(@PathVariable Long id){
+		// Llama al servicio para eliminar el cliente con el ID especificado.
+		servicio.eliminarCliente(id);
+		// Redirige al usuario de nuevo a la lista de clientes después de eliminar.
+		return "redirect:/clientes";
+	}
+	
 }

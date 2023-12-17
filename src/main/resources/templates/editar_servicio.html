@@ -18,24 +18,27 @@
 					<li class="nav-item">
 						<a class="nav-link active" aria-current="page" href="#">Home</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/vehiculos">Vehiculos</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="/clientes">Clientes</a>
-					</li>
-				 	<li class="nav-item">
-                        <a class="nav-link" href="/servicios">Modelos</a> <!-- Cambio el enlace a "servicios" -->
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/marcas">Marcas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tecnico">Tecnico</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/servicios">Servicios</a> <!-- Cambio el enlace a "servicios" -->
-                    </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/vehiculos">Vehiculos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/clientes">Clientes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/modelos">Modelos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/marcas">Marcas</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/tecnico">Tecnicos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/ordentrabajo">Orden De Trabajo</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/servicios">Servicios</a>
+              </li>
 					<li class="nav-item">
 						<a class="nav-link disabled" aria-disabled="true">Programación Avanzada</a>
 					</li>
@@ -62,6 +65,12 @@
 							<input type="text" name="descripcion" th:field="*{descripcion}" class="form-control" placeholder="Ingrese una descripción:" required> <!-- Cambio el placeholder -->
 						</div>
 						<br>
+						<div class="form-group">
+                        <label>Precio:</label>
+                        <input type="number" name="precio" th:field="*{precio}" class="form-control" placeholder="Ingrese el precio:" required>
+                        <small th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}" class="text-danger"></small>
+                    </div>
+                    <br>
 						<div class="box-footer">
 							<button class="btn btn-success">Guardar</button>
 						</div>

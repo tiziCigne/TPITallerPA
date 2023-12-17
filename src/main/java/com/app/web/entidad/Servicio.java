@@ -1,6 +1,7 @@
 package com.app.web.entidad;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -25,6 +26,9 @@ public class Servicio { // Cambio el nombre de la clase a "Servicio"
     
     @Column(name = "descripcion", nullable = false, length = 50)
     private String descripcion;
+    
+    @Column(name = "precio", nullable = false, length = 50)
+    private BigDecimal precio;
 
     @OneToMany(mappedBy = "servicio")
     private List<OrdenTrabajo> ordentrabajo;
@@ -33,17 +37,19 @@ public class Servicio { // Cambio el nombre de la clase a "Servicio"
         
     }
 
-    public Servicio(Long id, String nombre, String descripcion) {
+    public Servicio(Long id, String nombre, String descripcion, BigDecimal precio) {
         super();
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.precio = precio;
     }
     
-    public Servicio(String nombre, String descripcion) {
+    public Servicio(String nombre, String descripcion, BigDecimal precio) {
         super();
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.precio = precio;
     }
     
     public Long getId() {
@@ -69,10 +75,23 @@ public class Servicio { // Cambio el nombre de la clase a "Servicio"
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+    
+  //Agregamos un mÃ©todo para actualizar el precio
+    public void actualizarPrecio(BigDecimal nuevoPrecio) {
+        this.precio = nuevoPrecio;
+    }
 
     @Override
     public String toString() {
-        return "Servicio [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+        return "Servicio [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion +  ",precio=" + precio +"]";
     }
 
 }
