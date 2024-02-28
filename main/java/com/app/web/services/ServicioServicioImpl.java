@@ -39,7 +39,6 @@ public class ServicioServicioImpl implements ServicioServicio { // Cambio el nom
     public void eliminarServicio(Long id) { // Cambio el nombre del método
         repositorio.deleteById(id);
     }
-    
     @Override
     public Servicio agregarPrecio(Long id, BigDecimal precio) {
         Servicio servicio = obtenerServicioPorId(id);
@@ -49,8 +48,8 @@ public class ServicioServicioImpl implements ServicioServicio { // Cambio el nom
         }
         return null; // O manejar de otra manera si el servicio no existe
     }
-    
-    
+
+
     @Override
     public Servicio actualizarPrecio(Long id, BigDecimal nuevoPrecio) {
         Servicio servicio = obtenerServicioPorId(id);

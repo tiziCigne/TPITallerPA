@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import com.app.web.entidad.Servicio;
 
-@Repository
-public interface ServicioRepositorio extends JpaRepository<Servicio, Long> {
 
-    // Otros métodos del repositorio
+
+@Repository
+public interface ServicioRepositorio extends JpaRepository<Servicio, Long>{
 
     @Modifying
     @Query("UPDATE Servicio s SET s.precio = :precio WHERE s.id = :servicioId")

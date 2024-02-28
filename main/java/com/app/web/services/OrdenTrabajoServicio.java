@@ -1,14 +1,10 @@
 package com.app.web.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.app.web.entidad.OrdenTrabajo; // Cambio Vehiculo por OrdenTrabajo
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.app.web.entidad.Servicio;
 
 public interface OrdenTrabajoServicio {
 
@@ -20,7 +16,18 @@ public interface OrdenTrabajoServicio {
 
     public OrdenTrabajo actualizarOrdenTrabajo(OrdenTrabajo ordenTrabajo); // Cambio Vehiculo por OrdenTrabajo
 
-    public void eliminarOrdenTrabajo(Long id);
+    public void eliminarOrdenTrabajo(Long id); // Cambio Vehiculo por OrdenTrabajo
+    
+    public List<OrdenTrabajo> listarTodasLasOrdenesNoEliminadas();
 
-   
-    }
+    public List<OrdenTrabajo> listarTodasLasOrdenesEliminadas();
+    
+    public void restaurarOrdenTrabajo(Long id);
+
+	void eliminarServicio(OrdenTrabajo ordenTrabajo, Servicio servicio);
+
+	void agregarServicio(OrdenTrabajo ordenTrabajo, Servicio servicio);
+
+	List<OrdenTrabajo> filtrarOrdenesPorFecha(Date fecha);
+    
+}

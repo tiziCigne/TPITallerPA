@@ -2,17 +2,16 @@ package com.app.web.entidad;
 
 
 import java.math.BigDecimal;
-
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-
 
 @Entity
 @Table(name = "servicios") // Cambio el nombre de la tabla a "servicios"
@@ -26,33 +25,38 @@ public class Servicio { // Cambio el nombre de la clase a "Servicio"
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
     
-    @Column(name = "descripcion", nullable = false, length = 50)
+    @Column(name = "descripcion", nullable = false, length = 1000)
     private String descripcion;
     
-    @Column(name = "precio", nullable = false, length = 50)
-    private BigDecimal precio;
+    
 
+	@Column(name = "precio", nullable = false, length = 50)
+    public BigDecimal precio;
+
+    /*
     @OneToMany(mappedBy = "servicio")
     private List<OrdenTrabajo> ordentrabajo;
+    */
+    
+    @ManyToMany(mappedBy = "servicios")
+    private Set<OrdenTrabajo> ordenesTrabajo = new HashSet<>();
  
     public Servicio() {
         
     }
 
-    public Servicio(Long id, String nombre, String descripcion, BigDecimal precio) {
+    public Servicio(Long id, String nombre, String descripcion) {
         super();
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.precio = precio;
     }
     
-    public Servicio(String nombre, String descripcion, BigDecimal precio) {
+    public Servicio(String nombre, String descripcion) {
         super();
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.precio = precio;
-        }
+    }
     
     public Long getId() {
         return id;
@@ -77,22 +81,30 @@ public class Servicio { // Cambio el nombre de la clase a "Servicio"
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    
     public BigDecimal getPrecio() {
-        return precio;
-    }
+		return precio;
+	}
 
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
-
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
+	}	
     //Agregamos un método para actualizar el precio
     public void actualizarPrecio(BigDecimal nuevoPrecio) {
         this.precio = nuevoPrecio;
     }
 
+	public Set<OrdenTrabajo> getOrdenesTrabajo() {
+		return ordenesTrabajo;
+	}
+
+	public void setOrdenesTrabajo(Set<OrdenTrabajo> ordenesTrabajo) {
+		this.ordenesTrabajo = ordenesTrabajo;
+	}
+
     @Override
     public String toString() {
-        return "Servicio [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ",precio=" + precio +"]";
+        return "Servicio [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
     }
 
 }

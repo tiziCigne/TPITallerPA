@@ -1,23 +1,24 @@
 package com.app.web.entidad;
 
-
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 
 @Entity
 @Table
@@ -30,6 +31,9 @@ public class OrdenTrabajo { // Cambio Vehiculo por OrdenTrabajo
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha_creacion")
     private Date fechaCreacion;
+    
+    @Column(name = "eliminado")
+    private boolean eliminado;
 
 	@ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -38,29 +42,50 @@ public class OrdenTrabajo { // Cambio Vehiculo por OrdenTrabajo
     @ManyToOne
     @JoinColumn(name = "vehiculo_id")
     Vehiculo vehiculo;
-
+/*
     @ManyToOne
     @JoinColumn(name = "servicio_id")
     Servicio servicio;
+*/    
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "orden_trabajo_servicio",
+        joinColumns = @JoinColumn(name = "ordentrabajo_id"),
+        inverseJoinColumns = @JoinColumn(name = "servicio_id")
+    )
+    private Set<Servicio> servicios = new HashSet<>();
     
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
     private EstadosOrden estado;
-    
 
     public OrdenTrabajo() {
 
     }
 
-    public OrdenTrabajo(Cliente cliente, Vehiculo vehiculo, Servicio servicio) {
+    public Set<Servicio> getServicios() {
+		return servicios;
+	}
+
+	public void setServicios(Set<Servicio> servicios) {
+		this.servicios = servicios;
+	}
+
+	public OrdenTrabajo(Cliente cliente, Vehiculo vehiculo, Servicio servicio) {
 		super();
 		this.cliente = cliente;
 		this.vehiculo = vehiculo;
-		this.servicio = servicio;
+		//this.servicio = servicio;
 		this.fechaCreacion = new Date(); // Establecer la fecha de creación al momento de la creación de la orden de trabajo
-		this.estado = EstadosOrden.NUEVA; // Estado inicial al crear la orden
-    }
-
+	}
+	
+	public OrdenTrabajo(Cliente cliente, Vehiculo vehiculo) {
+	    super();
+	    this.cliente = cliente;
+	    this.vehiculo = vehiculo;
+	    this.fechaCreacion = new Date();
+	    this.servicios = new HashSet<>(); // Inicializar la colección
+	}
 
 	public Long getId() {
         return id;
@@ -88,13 +113,13 @@ public class OrdenTrabajo { // Cambio Vehiculo por OrdenTrabajo
         this.vehiculo = vehiculo;
     }
 
-    public Servicio getServicio() {
-        return servicio;
-    }
+    //public Servicio getServicio() {
+    //    return servicio;
+    //}
 
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
-    }
+    //public void setServicio(Servicio servicio) {
+    //    this.servicio = servicio;
+    //}
     
 
     public Date getFechaCreacion() {
@@ -104,6 +129,16 @@ public class OrdenTrabajo { // Cambio Vehiculo por OrdenTrabajo
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+    
+
+    public boolean isEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
+    }
+    
     public EstadosOrden getEstado() {
         return estado;
     }
@@ -111,11 +146,10 @@ public class OrdenTrabajo { // Cambio Vehiculo por OrdenTrabajo
     public void setEstado(EstadosOrden estado) {
         this.estado = estado;
     }
-    
 
 	@Override
 	public String toString() {
 		return "OrdenTrabajo [id=" + id + ", cliente=" + cliente
-				+ ", vehiculo=" + vehiculo + ", servicio=" + servicio + "]";
+				+ ", vehiculo=" + vehiculo + "]";
 	}
 }
